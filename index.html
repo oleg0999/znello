@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Пара — студенческий маркетплейс</title>
+<style>
+:root{--p:#6c55e8;--ink:#24243b;--muted:#77788d;--bg:#f7f7fb;--line:#e9e8f1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.nav{background:white;border-bottom:1px solid var(--line);padding:15px max(20px,calc((100% - 1120px)/2));display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:4}
+.logo{font-size:23px;font-weight:850;letter-spacing:-1px}
+.logo i{font-style:normal;background:var(--p);color:white;padding:4px 10px;border-radius:10px;margin-right:7px}
+.grow{flex:1}
+.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:700}
+.primary{background:var(--p);color:white}
+.soft{background:#eeeaff;color:var(--p)}
+.plain{background:white;border:1px solid var(--line);color:var(--ink)}
+.hero,.section{max-width:1120px;margin:auto;padding:48px 22px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+.eyebrow{background:#dff7ed;color:#267b5c;padding:7px 11px;border-radius:30px;font-size:12px;font-weight:800}
+.hero h1{font-size:clamp(38px,5vw,58px);letter-spacing:-2.5px;line-height:1.05;margin:22px 0 14px}
+.hero h1 span{color:var(--p)}
+.hero p{color:var(--muted);font-size:17px;line-height:1.6}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:23px 0}
+.art{border-radius:28px;padding:35px 25px;background:linear-gradient(135deg,#e6e0ff,#fff0e2);min-height:300px;display:grid;place-items:center}
+.paper{background:white;border-radius:18px;padding:22px;width:min(300px,100%);box-shadow:0 15px 40px #29234a16;transform:rotate(-3deg)}
+.paper small{color:var(--p);font-weight:800}
+.paper h3{margin:10px 0}
+.paper p{font-size:13px}
+.line{height:7px;background:#eeeef5;border-radius:10px;margin:10px 0}
+.line:nth-last-child(1){width:75%}
+.section{padding-top:15px;padding-bottom:45px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}
+.head h2{font-size:29px;letter-spacing:-1px;margin:0 0 5px}
+.head p{color:var(--muted);margin:0}
+.search{display:flex;gap:9px;padding:10px;background:white;border:1px solid var(--line);border-radius:15px;margin:18px 0}
+.search input{border:0;outline:0;flex:1;min-width:100px;padding:7px}
+.search select{border:0;background:#f7f6fc;border-radius:9px;padding:9px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{border:1px solid var(--line);background:white;border-radius:30px;padding:8px 13px;color:#66677c}
+.chip.active{background:#eeeaff;color:var(--p);border-color:#d7d0ff;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;min-height:235px;position:relative}
+.tag{font-size:11px;color:var(--p);background:#eeeaff;border-radius:7px;padding:6px 8px;font-weight:800;align-self:start}
+.fav{position:absolute;top:14px;right:14px;border:0;background:#f2f1f8;border-radius:50%;width:32px;height:32px;font-size:15px;line-height:1}
+.fav.on{background:#ffe1e1}
+.card h3{font-size:17px;line-height:1.35;margin:14px 0 7px;padding-right:34px}
+.desc{color:var(--muted);font-size:13px;line-height:1.55}
+.seller{margin-top:auto;border-top:1px solid #f0eff5;padding-top:13px;display:flex;align-items:center;gap:8px}
+.avatar{background:#e9e4ff;color:#5943d0;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800}
+.seller small{display:block;color:var(--muted)}
+.price{margin-left:auto;font-weight:850;white-space:nowrap}
+.card .plain{margin-top:13px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.step{background:white;border:1px solid var(--line);padding:21px;border-radius:17px}
+.step h3{margin:13px 0 6px}
+.step p{color:var(--muted);font-size:13px;line-height:1.6}
+.cta{margin-top:22px;background:var(--ink);color:white;padding:28px;border-radius:22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.cta p{color:#c9c8d8}
+.footer{border-top:1px solid var(--line);padding:24px;text-align:center;color:var(--muted);font-size:12px}
+.backdrop{display:none;position:fixed;inset:0;background:#19172c99;z-index:10;align-items:center;justify-content:center;padding:15px}
+.backdrop.open{display:flex}
+.modal{background:white;padding:24px;border-radius:20px;width:min(520px,100%);max-height:90vh;overflow:auto}
+.modalhead{display:flex;justify-content:space-between;align-items:center}
+.modal h2{margin:0}
+.close{border:0;background:#f2f1f8;border-radius:8px;font-size:20px;width:32px;height:32px;line-height:1}
+.field{display:grid;gap:6px;margin:13px 0}
+.field label{font-weight:700;font-size:13px}
+.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px}
+.field textarea{min-height:80px}
+.note{font-size:12px;color:var(--muted);line-height:1.5}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;border-radius:10px;padding:12px 18px;display:none;z-index:20}
+.toast.show{display:block}
+.empty{grid-column:1/-1;background:white;padding:35px;border-radius:16px;text-align:center;color:var(--muted)}
+@media(max-width:760px){
+.hero{grid-template-columns:1fr;padding-top:35px}
+.grid{grid-template-columns:repeat(2,1fr)}
+.steps{grid-template-columns:1fr}
+.head{align-items:start;flex-direction:column}
+.nav{padding:13px 15px}
+.nav .plain#login{display:none}
+}
+@media(max-width:520px){
+.grid{grid-template-columns:1fr}
+.search{flex-wrap:wrap}
+.search input{flex-basis:100%}
+.search select{flex:1;min-width:0}
+.cta{align-items:start;flex-direction:column}
+.hero h1{letter-spacing:-1.5px}
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="logo"><i>п</i>пара</div>
+  <div class="grow"></div>
+  <button class="btn plain" id="login">Войти</button>
+  <button class="btn primary" data-publish>+ Разместить</button>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <span class="eyebrow">✦ СТУДЕНТЫ ПОМОГАЮТ СТУДЕНТАМ</span>
+      <h1>Учиться проще,<br>когда вы <span>вместе.</span></h1>
+      <p>Находи полезные конспекты, учебные материалы и помощь по предметам. Или делись знаниями и зарабатывай.</p>
+      <div class="actions">
+        <button class="btn primary" id="heroFind">Найти материалы →</button>
+        <button class="btn plain" data-publish>Предложить услугу</button>
+      </div>
+    </div>
+    <div class="art">
+      <div class="paper">
+        <small>КОНСПЕКТ · ФИЗИОЛОГИЯ</small>
+        <h3>Нервная система</h3>
+        <p>Структурно, понятно, по темам лекций</p>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="catalog">
+    <div class="head">
+      <div>
+        <h2>Найди то, что нужно</h2>
+        <p>Материалы и услуги от студентов для студентов</p>
+      </div>
+      <button class="btn soft" id="all">Смотреть всё →</button>
+    </div>
+    <div class="search">
+      <input id="q" placeholder="Например, анатомия, биохимия, оформление…">
+      <select id="type">
+        <option value="all">Все предложения</option>
+        <option value="material">Готовые материалы</option>
+        <option value="service">Индивидуальные услуги</option>
+      </select>
+      <select id="sort">
+        <option value="default">Сначала полезное</option>
+        <option value="up">Сначала дешевле</option>
+        <option value="down">Сначала дороже</option>
+      </select>
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip active" data-cat="Все">Все</button>
+      <button class="chip" data-cat="Медицина">Медицина</button>
+      <button class="chip" data-cat="Гуманитарные">Гуманитарные</button>
+      <button class="chip" data-cat="Точные науки">Точные науки</button>
+      <button class="chip" data-cat="Оформление">Оформление</button>
+      <button class="chip" data-cat="Другое">Другое</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="section">
+    <div class="head">
+      <div>
+        <h2>Всё просто</h2>
+        <p>Три шага, чтобы начать</p>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div>🔎</div><h3>Найди подходящее</h3><p>Ищи по предмету, формату и цене. Сравнивай предложения и выбирай подходящее.</p></div>
+      <div class="step"><div>🗂️</div><h3>Размести своё</h3><p>Поделись собственными конспектами или предложи помощь с разбором темы и оформлением.</p></div>
+      <div class="step"><div>⭐</div><h3>Создавай репутацию</h3><p>Качественная работа и честные отзывы помогут находить новых заказчиков.</p></div>
+    </div>
+    <div class="cta">
+      <div>
+        <h2>Есть чем поделиться?</h2>
+        <p>Размести первое предложение и найди свою аудиторию.</p>
+      </div>
+      <button class="btn primary" data-publish>Создать объявление →</button>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  пара — студенческий маркетплейс · первая демоверсия<br>
+  Размещай только собственные материалы и соблюдай правила академической честности.
+</footer>
+
+<!-- Модалка публикации -->
+<div class="backdrop" id="publishModal">
+  <div class="modal">
+    <div class="modalhead">
+      <h2>Новое объявление</h2>
+      <button class="close" data-close="publishModal">×</button>
+    </div>
+    <form id="form">
+      <div class="field">
+        <label>Название</label>
+        <input id="title" required maxlength="90" placeholder="Например, конспект по анатомии">
+      </div>
+      <div class="field">
+        <label>Тип предложения</label>
+        <select id="kind">
+          <option value="material">Готовый учебный материал</option>
+          <option value="service">Индивидуальная услуга</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Категория</label>
+        <select id="category">
+          <option>Медицина</option>
+          <option>Гуманитарные</option>
+          <option>Точные науки</option>
+          <option>Оформление</option>
+          <option>Другое</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Цена, ₽</label>
+        <input id="price" type="number" min="0" required placeholder="250">
+      </div>
+      <div class="field">
+        <label>Описание</label>
+        <textarea id="description" required maxlength="600" placeholder="Что входит в предложение, формат и сроки…"></textarea>
+      </div>
+      <div class="field">
+        <label>Имя или псевдоним</label>
+        <input id="seller" required maxlength="40" placeholder="Как тебя будут видеть на сайте">
+      </div>
+      <p class="note">Демо-версия: объявления хранятся в этом браузере. Аккаунты, чат и онлайн-оплата пока не подключены.</p>
+      <button class="btn primary" style="width:100%">Опубликовать</button>
+    </form>
+  </div>
+</div>
+
+<!-- Модалка входа -->
+<div class="backdrop" id="loginModal">
+  <div class="modal">
+    <div class="modalhead">
+      <h2>Вход</h2>
+      <button class="close" data-close="loginModal">×</button>
+    </div>
+    <p>Регистрация будет добавлена в следующей версии. Сейчас можно изучить каталог и создать тестовое объявление.</p>
+    <button class="btn primary" data-close="loginModal">Понятно</button>
+  </div>
+</div>
+
+<!-- Модалка деталей -->
+<div class="backdrop" id="detailModal">
+  <div class="modal">
+    <div class="modalhead">
+      <h2 id="dTitle">Объявление</h2>
+      <button class="close" data-close="detailModal">×</button>
+    </div>
+    <p id="dDesc" style="color:var(--muted);line-height:1.6"></p>
+    <div id="dInfo" style="border-top:1px solid var(--line);padding-top:14px;margin-top:14px"></div>
+    <button class="btn primary" style="width:100%;margin-top:16px" data-close="detailModal">Закрыть</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var base = [
+    {id:1,type:'material',cat:'Медицина',title:'Анатомия: опорно-двигательная система',desc:'Структурированный конспект: кости, суставы, мышцы. Схемы и ключевые термины для повторения.',price:290,seller:'Алина',emoji:'🦴'},
+    {id:2,type:'service',cat:'Оформление',title:'Оформление работы по ГОСТ',desc:'Помощь с полями, оглавлением, нумерацией, списком литературы и единым стилем документа.',price:450,seller:'Максим',emoji:'📝'},
+    {id:3,type:'material',cat:'Медицина',title:'Биохимия: обмен белков',desc:'Краткие таблицы, основные реакции и определения для повторения перед занятием.',price:180,seller:'Диана',emoji:'🧬'},
+    {id:4,type:'service',cat:'Точные науки',title:'Разбор задач по статистике',desc:'Разберём ход решения и объясним формулы на примерах, чтобы ты могла решать самостоятельно.',price:600,seller:'Илья',emoji:'📊'},
+    {id:5,type:'material',cat:'Гуманитарные',title:'Шаблон презентации для доклада',desc:'Структура слайдов, подсказки по логике изложения и проверка перед выступлением.',price:150,seller:'София',emoji:'🎨'},
+    {id:6,type:'service',cat:'Медицина',title:'Подготовка к устному опросу',desc:'Помощь в составлении плана ответа, систематизации темы и тренировке устного объяснения.',price:350,seller:'Марк',emoji:'🩺'}
+  ];
+
+  var items = base.slice();
+  var active = 'Все';
+  var favs = new Set();
+
+  // Загружаем добавленные объявления
+  try {
+    var saved = JSON.parse(localStorage.getItem('paraItems') || '[]');
+    if (Array.isArray(saved)) items = items.concat(saved);
+  } catch(e) {}
+
+  // Загружаем избранное
+  try {
+    var savedFavs = JSON.parse(localStorage.getItem('paraFavs') || '[]');
+    if (Array.isArray(savedFavs)) favs = new Set(savedFavs);
+  } catch(e) {}
+
+  function $(id){ return document.getElementById(id); }
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function saveItems(){
+    try {
+      localStorage.setItem('paraItems', JSON.stringify(items.filter(function(y){
+        return !base.some(function(z){ return z.id === y.id; });
+      })));
+    } catch(e) {}
+  }
+
+  function saveFavs(){
+    try {
+      localStorage.setItem('paraFavs', JSON.stringify(Array.from(favs)));
+    } catch(e) {}
+  }
+
+  function render(){
+    var q = $('q').value.toLowerCase().trim();
+    var t = $('type').value;
+    var s = $('sort').value;
+
+    var a = items.filter(function(x){
+      var okCat = (active === 'Все' || x.cat === active);
+      var okType = (t === 'all' || x.type === t);
+      var hay = (x.title + ' ' + x.desc + ' ' + x.cat + ' ' + x.seller).toLowerCase();
+      var okQ = !q || hay.indexOf(q) !== -1;
+      return okCat && okType && okQ;
+    });
+
+    if (s === 'up') a.sort(function(x,y){ return x.price - y.price; });
+    if (s === 'down') a.sort(function(x,y){ return y.price - x.price; });
+
+    if (!a.length){
+      $('grid').innerHTML = '<div class="empty">Ничего не найдено. Попробуй изменить запрос.</div>';
+      return;
+    }
+
+    $('grid').innerHTML = a.map(function(x){
+      var isFav = favs.has(x.id);
+      return '<article class="card">' +
+        '<span class="tag">' + esc(x.cat) + '</span>' +
+        '<button class="fav' + (isFav?' on':'') + '" data-fav="' + x.id + '" title="В избранное">' + (isFav?'❤️':'🤍') + '</button>' +
+        '<h3>' + esc(x.emoji || '📚') + ' ' + esc(x.title) + '</h3>' +
+        '<div class="desc">' + esc(x.desc) + '</div>' +
+        '<div class="seller">' +
+          '<div class="avatar">' + esc(String(x.seller).charAt(0).toUpperCase()) + '</div>' +
+          '<div><b>' + esc(x.seller) + '</b><small>' + (x.type==='material'?'Готовый материал':'Индивидуальная услуга') + '</small></div>' +
+          '<div class="price">' + (x.price ? Number(x.price).toLocaleString('ru-RU') + ' ₽' : 'Бесплатно') + '</div>' +
+        '</div>' +
+        '<button class="btn plain" data-detail="' + x.id + '">Подробнее</button>' +
+      '</article>';
+    }).join('');
+  }
+
+  function modal(id, open){
+    if (open === undefined) open = true;
+    $(id).classList.toggle('open', open);
+  }
+
+  var toastTimer;
+  function toast(s){
+    var el = $('toast');
+    el.textContent = s;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+  }
+
+  // Привязки
+  var publishBtns = document.querySelectorAll('[data-publish]');
+  for (var i = 0; i < publishBtns.length; i++){
+    publishBtns[i].addEventListener('click', function(){ modal('publishModal'); });
+  }
+  $('login').addEventListener('click', function(){ modal('loginModal'); });
+  $('heroFind').addEventListener('click', function(){
+    $('catalog').scrollIntoView({behavior:'smooth'});
+  });
+
+  var closeBtns = document.querySelectorAll('[data-close]');
+  for (var j = 0; j < closeBtns.length; j++){
+    closeBtns[j].addEventListener('click', function(){
+      modal(this.getAttribute('data-close'), false);
+    });
+  }
+
+  var backdrops = document.querySelectorAll('.backdrop');
+  for (var k = 0; k < backdrops.length; k++){
+    backdrops[k].addEventListener('click', function(e){
+      if (e.target === this) modal(this.id, false);
+    });
+  }
+
+  ['q','type','sort'].forEach(function(id){
+    $(id).addEventListener(id === 'q' ? 'input' : 'change', render);
+  });
+
+  $('chips').addEventListener('click', function(e){
+    var b = e.target.closest('[data-cat]');
+    if (!b) return;
+    active = b.getAttribute('data-cat');
+    var chips = document.querySelectorAll('.chip');
+    for (var m = 0; m < chips.length; m++){
+      chips[m].classList.toggle('active', chips[m] === b);
+    }
+    render();
+  });
+
+  $('all').addEventListener('click', function(){
+    active = 'Все';
+    $('q').value = '';
+    $('type').value = 'all';
+    $('sort').value = 'default';
+    var chips = document.querySelectorAll('.chip');
+    for (var n = 0; n < chips.length; n++){
+      chips[n].classList.toggle('active', chips[n].getAttribute('data-cat') === 'Все');
+    }
+    render();
+  });
+
+  // Делегирование кликов по сетке: детали + избранное
+  $('grid').addEventListener('click', function(e){
+    var favBtn = e.target.closest('[data-fav]');
+    if (favBtn){
+      var fid = Number(favBtn.getAttribute('data-fav'));
+      if (favs.has(fid)) { favs.delete(fid); toast('Убрано из избранного'); }
+      else { favs.add(fid); toast('Добавлено в избранное ❤️'); }
+      saveFavs();
+      render();
+      return;
+    }
+
+    var detBtn = e.target.closest('[data-detail]');
+    if (detBtn){
+      var did = Number(detBtn.getAttribute('data-detail'));
+      var x = items.find(function(y){ return y.id === did; });
+      if (!x) return;
+      $('dTitle').textContent = (x.emoji || '📚') + ' ' + x.title;
+      $('dDesc').textContent = x.desc;
+      $('dInfo').innerHTML =
+        '<p style="margin:6px 0"><b>Категория:</b> ' + esc(x.cat) + '</p>' +
+        '<p style="margin:6px 0"><b>Тип:</b> ' + (x.type==='material'?'Готовый материал':'Индивидуальная услуга') + '</p>' +
+        '<p style="margin:6px 0"><b>Исполнитель:</b> ' + esc(x.seller) + '</p>' +
+        '<p style="margin:6px 0"><b>Цена:</b> ' + (x.price ? Number(x.price).toLocaleString('ru-RU') + ' ₽' : 'Бесплатно') + '</p>' +
+        '<p class="note" style="margin-top:10px">В демоверсии оформление заказа пока не подключено.</p>';
+      modal('detailModal');
+    }
+  });
+
+  // Отправка формы
+  $('form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var x = {
+      id: Date.now(),
+      type: $('kind').value,
+      cat: $('category').value,
+      title: $('title').value.trim(),
+      desc: $('description').value.trim(),
+      price: Number($('price').value),
+      seller: $('seller').value.trim(),
+      emoji: $('kind').value === 'material' ? '📚' : '✨'
+    };
+    items.unshift(x);
+    saveItems();
+    e.target.reset();
+    modal('publishModal', false);
+
+    active = 'Все';
+    var chips = document.querySelectorAll('.chip');
+    for (var p = 0; p < chips.length; p++){
+      chips[p].classList.toggle('active', chips[p].getAttribute('data-cat') === 'Все');
+    }
+    render();
+    $('catalog').scrollIntoView({behavior:'smooth'});
+    toast('Объявление добавлено в каталог!');
+  });
+
+  // Закрытие по Escape
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){
+      var opened = document.querySelector('.backdrop.open');
+      if (opened) modal(opened.id, false);
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
