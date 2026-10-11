@@ -11,8 +11,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-s
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 .nav{background:white;border-bottom:1px solid var(--line);padding:15px max(20px,calc((100% - 1120px)/2));display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:4}
-.logo{font-size:23px;font-weight:850;letter-spacing:-1px}
-.logo i{font-style:normal;background:var(--p);color:white;padding:4px 10px;border-radius:10px;margin-right:7px}
+.logo{display:flex;align-items:center}
+.logo img{height:38px;width:auto;display:block}
 .grow{flex:1}
 .btn{border:0;border-radius:11px;padding:11px 15px;font-weight:700}
 .primary{background:var(--p);color:white}
@@ -95,7 +95,7 @@ button{cursor:pointer}
 </head>
 <body>
 <header class="nav">
-  <div class="logo"><i>п</i>пара</div>
+  <div class="logo"><img src="logo.png" alt="Пара"></div>
   <div class="grow"></div>
   <button class="btn plain" id="login">Войти</button>
   <button class="btn primary" data-publish>+ Разместить</button>
